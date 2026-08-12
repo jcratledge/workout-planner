@@ -1,22 +1,27 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { AuthProvider } from './lib/auth'
+import ProtectedRoute from './components/ProtectedRoute'
 import TvDisplay from './pages/TvDisplay'
+import Login from './pages/Login'
+import BuilderHome from './pages/BuilderHome'
 
 export default function App() {
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/display/:token" element={<TvDisplay />} />
-        <Route
-          path="*"
-          element={
-            <div className="min-h-screen flex items-center justify-center">
-              <p style={{ color: 'var(--color-ink-muted)' }}>
-                Workout Planner — trainer login and builder coming next.
-              </p>
-            </div>
-          }
-        />
-      </Routes>
+      <AuthProvider>
+        <Routes>
+          <Route path="/display/:token" element={<TvDisplay />} />
+          <Route path="/login" element={<Login />} />
+          <Route
+            path="/"
+            element={
+              <ProtectedRoute>
+                <BuilderHome />
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </AuthProvider>
     </BrowserRouter>
   )
 }
